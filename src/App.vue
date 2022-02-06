@@ -1,52 +1,14 @@
 <template>
 	<div id="app">
-		<router-view></router-view>
-		<!-- <HomePage v-if="currentView === 'home'" :cards="cards" @toggleActive="toggleActive" @changeView="currentView = 'AddCard'" @delete="deleteEcho" />
 		<keep-alive>
-			<AddCardPage v-if="currentView === 'AddCard'" @toHome="currentView = 'home'" @card="saveCard" @goBack="currentView = 'home'" :cards="cards" />
-		</keep-alive> -->
+			<router-view></router-view>
+		</keep-alive>
 	</div>
 </template>
 
 <script>
-// import HomePage from "./views/HomePage.vue";
-// import AddCardPage from "./views/AddCardPage.vue";
-
 export default {
 	name: "App",
-	// components: {
-	// 	HomePage,
-	// 	AddCardPage,
-	// },
-	// data() {
-	// 	return {
-	// 		cards: [],
-	// 	};
-	// },
-	// methods: {
-	// 	saveCard(card) {
-	// 		this.cards.push(card);
-	// 		localStorage.setItem("cards", JSON.stringify(this.cards));
-	// 	},
-	// 	toggleActive(index) {
-	// 		for (const elem of this.cards) {
-	// 			if (elem.active === true) {
-	// 				elem.active = false;
-	// 			}
-	// 		}
-	// 		this.cards[index].active = !this.cards[index].active;
-	// 		localStorage.setItem("cards", JSON.stringify(this.cards));
-	// 	},
-	// 	deleteEcho(index) {
-	// 		this.cards.splice(index, 1);
-	// 		localStorage.setItem("cards", JSON.stringify(this.cards));
-	// 	},
-	// },
-	// created() {
-	// 	if (localStorage.cards) {
-	// 		this.cards = JSON.parse(localStorage.getItem("cards"));
-	// 	}
-	// },
 };
 </script>
 

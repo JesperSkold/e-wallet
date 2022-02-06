@@ -1,9 +1,10 @@
 <template>
 	<main>
 		<h1>E-WALLET</h1>
-		<h5>ACTIVE CARD</h5>
-		<h5>You dont have any cards yet, click the add new card button to add cards.</h5>
-		<CardList :cards="cards" @toggleActive="toggleActive" @delete="saveIndex" />
+		<h5 v-if="cards.length">ACTIVE CARD</h5>
+		<h5 v-if="cards.length">{{ checkIfActives }}</h5>
+		<h5 v-if="!cards.length">You dont have any cards yet, click the add new card button to add cards.</h5>
+		<CardList @delete="saveIndex" />
 		<div class="fade-layer" v-if="showModal"></div>
 		<div class="modal" v-if="showModal">
 			<p>Are you sure you want to remove this card?</p>
@@ -21,28 +22,6 @@
 		</div>
 		<router-link :to="{ name: 'AddCardPage' }"><button class="add-btn">ADD A NEW CARD</button></router-link>
 		<back-to-top :bottom="50" bg-color="#141a1f"></back-to-top>
-		<!-- <h1>E-WALLET</h1>
-		<h5 v-if="cards.length">ACTIVE CARD</h5>
-		<h5 v-if="cards.length">{{ checkIfActives }}</h5>
-		<h5 v-if="!cards.length">You dont have any cards yet, click the add new card button to add cards.</h5>
-		<CardList :cards="cards" @toggleActive="toggleActive" @delete="saveIndex" />
-		<div class="fade-layer" v-if="showModal"></div>
-		<div class="modal" v-if="showModal">
-			<p>Are you sure you want to remove this card?</p>
-			<div class="btn-container">
-				<button
-					@click="
-						$emit('delete', deleteIndex);
-						showModal = false;
-					"
-				>
-					YES
-				</button>
-				<button @click="showModal = false">NO</button>
-			</div>
-		</div>
-		<button class="add-btn" @click="$emit('changeView')">ADD A NEW CARD</button>
-		<back-to-top :bottom="50" bg-color="#141a1f"></back-to-top> -->
 	</main>
 </template>
 
@@ -60,31 +39,23 @@ export default {
 			deleteIndex: null,
 		};
 	},
-	props: {
-		cards: Array,
-	},
 	methods: {
-		toggleActive(index) {
-			this.$emit("toggleActive", index);
-		},
 		saveIndex(index) {
 			this.deleteIndex = index;
 			this.showModal = true;
 		},
-		deleteCard(index){
-			this.$store.dispatch('deleteDispatch',index)
-		}
+		deleteCard(index) {
+			this.$store.dispatch("deleteDispatch", index);
+		},
 	},
-	// computed: {
-	// 	checkIfActives() {
-	// 		for (const obj of this.cards) {
-	// 			if (obj.active === true) {
-	// 				return "";
-	// 			}
-			// }
-			// return "You dont have an active card yet, pick a card to activate it!";
-		// },
-	// },
+	computed: {
+		cards() {
+			return this.$store.state.cards;
+		},
+		checkIfActives() {
+			return this.$store.getters.checkActiveCard;
+		},
+	},
 };
 </script>
 

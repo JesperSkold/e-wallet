@@ -5,34 +5,8 @@
 
 		<div class="chip-signal-box">
 			<img v-if="card.vendor === 'bitcoin' || card.vendor === 'ninja'" src="../assets/wifi_white.svg" alt="" class="signal" height="70" />
-			<img v-else src="../assets/wifi.svg" alt="wifi" class="signal" height="70"/>
-			<img src="../assets/chip.svg" alt="wifi" class="chip" height="50" width="62"/>
-		</div>
-<!-- @click.stop="deleteCard(index)" -->
-		<img v-if="index !== undefined" src="../assets/delete.svg" alt="trashcan" srcset="" class="delete" @click.stop="$emit('delete')" height="49" />
-		<p class="card-number">{{ numberFormatting }}</p>
-		<div class="bottom-text">
-			<div class="card-holder">
-				<p class="name">CARDHOLDER NAME</p>
-				<p class="real-name">{{ card.cardHolder.toUpperCase() }}</p>
-			</div>
-
-			<div class="valid-text">
-				<p class="valid-until">VALID UNTIL</p>
-				<p v-if="card.expireMonth === '' && card.expireYear === ''" class="valid-expire">MM / YY</p>
-				<p v-else class="valid-expire">{{ card.expireMonth }} / {{ card.expireYear }}</p>
-			</div>
-
-		</div>
-	</div>
-	<!-- <div @click="$emit('activeCard', index)" :style="{ background: vendorColorHandler, color: textColorHandler }" :class="layerIndex" class="card">
-		<img v-if="card.vendor" :src="require(`../assets/${card.vendor}.svg`)" alt="currency" class="vendor" height="65" />
-		<div v-else class="vendor-placeholder"></div>
-
-		<div class="chip-signal-box">
-			<img v-if="card.vendor === 'bitcoin' || card.vendor === 'ninja'" src="../assets/wifi_white.svg" alt="" class="signal" height="70" />
-			<img v-else src="../assets/wifi.svg" alt="wifi" class="signal" height="70"/>
-			<img src="../assets/chip.svg" alt="wifi" class="chip" height="50" width="62"/>
+			<img v-else src="../assets/wifi.svg" alt="wifi" class="signal" height="70" />
+			<img src="../assets/chip.svg" alt="wifi" class="chip" height="50" width="62" />
 		</div>
 
 		<img v-if="index !== undefined" src="../assets/delete.svg" alt="trashcan" srcset="" class="delete" @click.stop="$emit('delete', index)" height="49" />
@@ -48,9 +22,8 @@
 				<p v-if="card.expireMonth === '' && card.expireYear === ''" class="valid-expire">MM / YY</p>
 				<p v-else class="valid-expire">{{ card.expireMonth }} / {{ card.expireYear }}</p>
 			</div>
-
 		</div>
-	</div> -->
+	</div>
 </template>
 
 <script>
@@ -60,46 +33,20 @@ export default {
 		layerIndex: String,
 		index: Number,
 	},
-	methods:{
-		activeCard(index){
-			this.$store.dispatch('toggleActive', index)
+	methods: {
+		activeCard(index) {
+			this.$store.dispatch("toggleActive", index);
 		},
-		// deleteCard(index){
-		// 	this.$store.dispatch('deleteDispatch',index)
-		// }
 	},
 	computed: {
 		numberFormatting() {
-			if (this.card.cardNumber) {
-				return this.card.cardNumber.match(/.{1,4}/g).join(" ");
-			}
-			return "";
+			return this.$store.getters.numberFormatting(this.card);
 		},
 		vendorColorHandler() {
-			if (this.card.vendor === "bitcoin") {
-				return "#FFB84D";
-			} else if (this.card.vendor === "blockchain") {
-				return "#8B58F9";
-			} else if (this.card.vendor === "evil") {
-				return "#F33355";
-			} else if (this.card.vendor === "ninja") {
-				return "#222222";
-			} else {
-				return "#d0d0d0";
-			}
+			return this.$store.getters.vendorColorHandler(this.card);
 		},
 		textColorHandler() {
-			if (this.card.vendor === "bitcoin") {
-				return "black";
-			} else if (this.card.vendor === "blockchain") {
-				return "white";
-			} else if (this.card.vendor === "evil") {
-				return "white";
-			} else if (this.card.vendor === "ninja") {
-				return "white";
-			} else {
-				return "black";
-			}
+			return this.$store.getters.textColorHandler(this.card);
 		},
 	},
 };

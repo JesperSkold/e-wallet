@@ -13,9 +13,6 @@ export default {
 	components: {
 		CardItem,
 	},
-	props: {
-		cards: Array,
-	},
 	methods: {
 		toggleActive(index) {
 			this.$emit("toggleActive", index);
@@ -25,6 +22,9 @@ export default {
 		},
 	},
 	computed: {
+		cards(){
+			return this.$store.state.cards
+		},
 		activeShadowHandler() {
 			for (const obj of this.cards) {
 				if (obj.active && obj.vendor === "bitcoin") {

@@ -1,6 +1,90 @@
 <template>
 	<main>
 		<h1>ADD NEW CARD</h1>
+		<router-link to="/"><img class="go-back" src="../assets/go_back.svg" alt="go back btn" @click="$emit('goBack')" /></router-link>
+		<h5>NEW CARD</h5>
+		<CardItem :card="card" class="noEmits" />
+
+		<form @submit.prevent="submitCard">
+			<div>
+				<label for="cardNumber">CARD NUMBER</label>
+				<input
+					name="cardNumber"
+					id="card number"
+					type="text"
+					placeholder="XXXX XXXX XXXX XXXX"
+					v-model="card.cardNumber"
+					maxlength="16"
+					@keydown="preventLetter($event)"
+					required
+				/>
+			</div>
+
+			<div>
+				<label for="fullName">CARDHOLDER NAME</label>
+				<input
+					name="fullName"
+					id="name"
+					type="text"
+					placeholder="Firstname Lastname"
+					v-model="card.cardHolder"
+					maxlength="30"
+					@keydown="preventNum($event)"
+					required
+				/>
+			</div>
+
+			<div class="month-year">
+				<div class="month-container">
+					<label for="months">MONTH</label>
+					<select name="months" id="month" v-model="card.expireMonth" required>
+						<option value="" disabled selected hidden></option>
+						<option value="01">01</option>
+						<option value="02">02</option>
+						<option value="03">03</option>
+						<option value="04">04</option>
+						<option value="05">05</option>
+						<option value="06">06</option>
+						<option value="07">07</option>
+						<option value="08">08</option>
+						<option value="09">09</option>
+						<option value="10">10</option>
+						<option value="11">11</option>
+						<option value="12">12</option>
+					</select>
+				</div>
+
+				<div class="year-container">
+					<label for="years">YEAR</label>
+					<select name="years" id="year" v-model="card.expireYear" required>
+						<option value="" disabled selected hidden></option>
+						<option value="22">22</option>
+						<option value="23">23</option>
+						<option value="24">24</option>
+						<option value="25">25</option>
+						<option value="26">26</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="vendor-container">
+				<label for="vendor">VENDOR</label>
+				<select name="vendor" id="vendor" v-model="card.vendor" required>
+					<option value="" disabled selected hidden></option>
+					<option value="bitcoin">Bitcoin Inc</option>
+					<option value="blockchain">Blockchain Inc</option>
+					<option value="evil">Evil Corp</option>
+					<option value="ninja">Ninja Bank</option>
+				</select>
+			</div>
+
+			<ul v-if="errors.length">
+				<li v-for="error in errors" :key="error">{{ error }}</li>
+			</ul>
+			<button type="submit">ADD CARD</button>
+			<!-- <router-link to="/"><button type="submit">ADD CARD</button></router-link> -->
+		</form>
+		<!-- <h1>ADD NEW CARD</h1>
 		<img class="go-back" src="../assets/go_back.svg" alt="go back btn" @click="$emit('goBack')" />
 		<h5>NEW CARD</h5>
 		<CardItem :card="card" class="noEmits" />
@@ -20,6 +104,7 @@
 					required
 				/>
 			</div>
+
 			<div>
 				<label for="fullName">CARDHOLDER NAME</label>
 				<input
@@ -54,6 +139,7 @@
 						<option value="12">12</option>
 					</select>
 				</div>
+
 				<div class="year-container">
 					<label for="years">YEAR</label>
 					<select name="years" id="year" v-model="card.expireYear" @change="removeSingleError" required>
@@ -82,7 +168,8 @@
 				<li v-for="error in errors" :key="error">{{ error }}</li>
 			</ul>
 			<button @click="validateForm" type="submit">ADD CARD</button>
-		</form>
+		</form> -->
+
 	</main>
 </template>
 
@@ -94,7 +181,6 @@ export default {
 	},
 	data() {
 		return {
-			errors: [],
 			filledOutForm: false,
 			cardColor: "",
 			textColor: "",
@@ -109,16 +195,13 @@ export default {
 			},
 		};
 	},
-	props: {
-		cards: Array,
-	},
+	// props: {
+	// 	cards: Array,
+	// },
 	computed: {
-		numberFormatting() {
-			if (this.card.cardNumber) {
-				return this.card.cardNumber.match(/.{1,4}/g).join(" ");
-			}
-			return "";
-		},
+		errors(){
+			return this.$store.state.errors
+		}
 	},
 	methods: {
 		preventLetter(e) {
@@ -135,72 +218,73 @@ export default {
 			return String(Math.floor(Math.random() * 9)) + String(Math.floor(Math.random() * 9)) + String(Math.floor(Math.random() * 9));
 		},
 		submitCard() {
-			this.$emit("card", { ...this.card });
+			this.$store.dispatch("card", { ...this.card });
 		},
-		validateForm() {
-			this.errors = [];
-			if (this.card.cardNumber === "") {
-				this.errors.push("You must fill out your card number!");
-			} else if (this.card.cardNumber.match(/\s+/g)) {
-				this.errors.push("Fill out your card without spaces!");
-			} else if (!this.card.cardNumber.match(/^\d+$/)) {
-				this.errors.push("You can only have numbers in your card number!");
-			} else if (this.card.cardNumber.length < 16 || this.card.cardNumber.length > 16) {
-				this.errors.push("Your card number needs to be exactly 12 numbers!");
-			}
+	}
+		// validateForm() {
+		// 	this.errors = [];
+		// 	if (this.card.cardNumber === "") {
+		// 		this.errors.push("You must fill out your card number!");
+		// 	} else if (this.card.cardNumber.match(/\s+/g)) {
+		// 		this.errors.push("Fill out your card without spaces!");
+		// 	} else if (!this.card.cardNumber.match(/^\d+$/)) {
+		// 		this.errors.push("You can only have numbers in your card number!");
+		// 	} else if (this.card.cardNumber.length < 16 || this.card.cardNumber.length > 16) {
+		// 		this.errors.push("Your card number needs to be exactly 12 numbers!");
+		// 	}
 
-			if (this.card.cardHolder === "" || this.card.cardHolder.match(/^\s+$/)) {
-				this.errors.push("You must fill out your name!");
-			} else if (this.card.cardHolder.match(/[0-9!@#$%^§&*()_+\-=[\]{};':"\\|,.<>/?¨´]+/g)) {
-				this.errors.push("You cant have numbers or special characters in your name!");
-			} else if (this.card.cardHolder.length < 4) {
-				this.errors.push("Your name must be longer than 3 letters, sorry!");
-			} else if (this.card.cardHolder.length > 29) {
-				this.errors.push("I'm sorry if you have a long name, but it cant be more than 29 letters!");
-			}
+		// 	if (this.card.cardHolder === "" || this.card.cardHolder.match(/^\s+$/)) {
+		// 		this.errors.push("You must fill out your name!");
+		// 	} else if (this.card.cardHolder.match(/[0-9!@#$%^§&*()_+\-=[\]{};':"\\|,.<>/?¨´]+/g)) {
+		// 		this.errors.push("You cant have numbers or special characters in your name!");
+		// 	} else if (this.card.cardHolder.length < 4) {
+		// 		this.errors.push("Your name must be longer than 3 letters, sorry!");
+		// 	} else if (this.card.cardHolder.length > 29) {
+		// 		this.errors.push("I'm sorry if you have a long name, but it cant be more than 29 letters!");
+		// 	}
 
-			if (this.card.expireMonth === "") {
-				this.errors.push("Select what month your card expires!");
-			}
+		// 	if (this.card.expireMonth === "") {
+		// 		this.errors.push("Select what month your card expires!");
+		// 	}
 
-			if (this.card.expireYear === "") {
-				this.errors.push("Select what year your card expires!");
-			}
+		// 	if (this.card.expireYear === "") {
+		// 		this.errors.push("Select what year your card expires!");
+		// 	}
 
-			if (this.card.vendor === "") {
-				this.errors.push("Select a vendor!");
-			}
+		// 	if (this.card.vendor === "") {
+		// 		this.errors.push("Select a vendor!");
+		// 	}
 
-			this.checkDupNum();
+		// 	// this.checkDupNum();
 
-			if (!this.errors.length) {
-				this.filledOutForm = true;
-				this.$emit("toHome");
-				this.submitCard();
-				(this.cardColor = "#d0d0d0"),
-					(this.card.vendor = ""),
-					(this.card.cardNumber = ""),
-					(this.card.cardHolder = ""),
-					(this.card.expireMonth = ""),
-					(this.card.expireYear = ""),
-					(this.card.CCV = this.randomizeCvv());
-			}
-		},
-		removeSingleError(event) {
-			for (const error of this.errors) {
-				if (error.includes(event.target.id)) {
-					this.errors.splice(this.errors.indexOf(error), 1);
-				}
-			}
-		},
-		checkDupNum() {
-			for (const value of this.cards) {
-				if (this.card.cardNumber === value.cardNumber) {
-					this.errors.push("A card with this number already exists!");
-				}
-			}
-		},
-	},
+		// 	if (!this.errors.length) {
+		// 		this.filledOutForm = true;
+		// 		this.$emit("toHome");
+		// 		this.submitCard();
+		// 		(this.cardColor = "#d0d0d0"),
+		// 			(this.card.vendor = ""),
+		// 			(this.card.cardNumber = ""),
+		// 			(this.card.cardHolder = ""),
+		// 			(this.card.expireMonth = ""),
+		// 			(this.card.expireYear = ""),
+		// 			(this.card.CCV = this.randomizeCvv());
+		// 	}
+		// },
+		// removeSingleError(event) {
+		// 	for (const error of this.errors) {
+		// 		if (error.includes(event.target.id)) {
+		// 			this.errors.splice(this.errors.indexOf(error), 1);
+		// 		}
+		// 	}
+		// },
+		// checkDupNum() {
+		// 	for (const value of this.cards) {
+		// 		if (this.card.cardNumber === value.cardNumber) {
+		// 			this.errors.push("A card with this number already exists!");
+		// 		}
+		// 	}
+		// },
+	// },
 };
 </script>
 

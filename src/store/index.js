@@ -54,12 +54,29 @@ export default new Vuex.Store({
         state.cards.push(obj)
         router.push("/")
       }
-    }
+    },
+		toggleActive(state, index){
+			for (const elem of state.cards) {
+				if (elem.active === true) {
+					elem.active = false;
+				}
+			}
+			state.cards[index].active = !state.cards[index].active;
+		},
+		deleteCard(state, index){
+			state.cards.splice(index, 1)
+		}
   },
   actions:{
     card(context, obj){
       context.commit('AddCard', obj)
-    }
+    },
+		toggleActive(context, index){
+			context.commit('toggleActive', index)
+		},
+		deleteDispatch(context, index){
+			context.commit('deleteCard', index)
+		}
   },
   getters:{
 

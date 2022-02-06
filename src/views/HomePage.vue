@@ -10,7 +10,7 @@
 			<div class="btn-container">
 				<button
 					@click="
-						$emit('delete', deleteIndex);
+						deleteCard(deleteIndex);
 						showModal = false;
 					"
 				>
@@ -19,7 +19,7 @@
 				<button @click="showModal = false">NO</button>
 			</div>
 		</div>
-		<router-link :to="{name: 'AddCardPage'}"><button class="add-btn">ADD A NEW CARD</button></router-link>
+		<router-link :to="{ name: 'AddCardPage' }"><button class="add-btn">ADD A NEW CARD</button></router-link>
 		<back-to-top :bottom="50" bg-color="#141a1f"></back-to-top>
 		<!-- <h1>E-WALLET</h1>
 		<h5 v-if="cards.length">ACTIVE CARD</h5>
@@ -71,6 +71,9 @@ export default {
 			this.deleteIndex = index;
 			this.showModal = true;
 		},
+		deleteCard(index){
+			this.$store.dispatch('deleteDispatch',index)
+		}
 	},
 	// computed: {
 	// 	checkIfActives() {

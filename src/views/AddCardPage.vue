@@ -1,7 +1,7 @@
 <template>
 	<main>
 		<h1>ADD NEW CARD</h1>
-		<router-link to="/"><img class="go-back" src="../assets/go_back.svg" alt="go back btn" @click="$emit('goBack')" /></router-link>
+		<router-link to="/" class="go-back"><img src="../assets/go_back.svg" alt="go back btn" @click="$emit('goBack')" /></router-link>
 		<h5>NEW CARD</h5>
 		<CardItem :card="card" class="noEmits" />
 
@@ -22,16 +22,7 @@
 
 			<div>
 				<label for="fullName">CARDHOLDER NAME</label>
-				<input
-					name="fullName"
-					id="name"
-					type="text"
-					placeholder="Firstname Lastname"
-					v-model="card.cardHolder"
-					maxlength="30"
-					@keydown="preventNum($event)"
-					required
-				/>
+				<input name="fullName" id="name" type="text" placeholder="Firstname Lastname" v-model="card.cardHolder" maxlength="30" @keydown="preventNum($event)" required />
 			</div>
 
 			<div class="month-year">
@@ -169,7 +160,6 @@
 			</ul>
 			<button @click="validateForm" type="submit">ADD CARD</button>
 		</form> -->
-
 	</main>
 </template>
 
@@ -199,9 +189,9 @@ export default {
 	// 	cards: Array,
 	// },
 	computed: {
-		errors(){
-			return this.$store.state.errors
-		}
+		errors() {
+			return this.$store.state.errors;
+		},
 	},
 	methods: {
 		preventLetter(e) {
@@ -220,70 +210,70 @@ export default {
 		submitCard() {
 			this.$store.dispatch("card", { ...this.card });
 		},
-	}
-		// validateForm() {
-		// 	this.errors = [];
-		// 	if (this.card.cardNumber === "") {
-		// 		this.errors.push("You must fill out your card number!");
-		// 	} else if (this.card.cardNumber.match(/\s+/g)) {
-		// 		this.errors.push("Fill out your card without spaces!");
-		// 	} else if (!this.card.cardNumber.match(/^\d+$/)) {
-		// 		this.errors.push("You can only have numbers in your card number!");
-		// 	} else if (this.card.cardNumber.length < 16 || this.card.cardNumber.length > 16) {
-		// 		this.errors.push("Your card number needs to be exactly 12 numbers!");
-		// 	}
+	},
+	// validateForm() {
+	// 	this.errors = [];
+	// 	if (this.card.cardNumber === "") {
+	// 		this.errors.push("You must fill out your card number!");
+	// 	} else if (this.card.cardNumber.match(/\s+/g)) {
+	// 		this.errors.push("Fill out your card without spaces!");
+	// 	} else if (!this.card.cardNumber.match(/^\d+$/)) {
+	// 		this.errors.push("You can only have numbers in your card number!");
+	// 	} else if (this.card.cardNumber.length < 16 || this.card.cardNumber.length > 16) {
+	// 		this.errors.push("Your card number needs to be exactly 12 numbers!");
+	// 	}
 
-		// 	if (this.card.cardHolder === "" || this.card.cardHolder.match(/^\s+$/)) {
-		// 		this.errors.push("You must fill out your name!");
-		// 	} else if (this.card.cardHolder.match(/[0-9!@#$%^§&*()_+\-=[\]{};':"\\|,.<>/?¨´]+/g)) {
-		// 		this.errors.push("You cant have numbers or special characters in your name!");
-		// 	} else if (this.card.cardHolder.length < 4) {
-		// 		this.errors.push("Your name must be longer than 3 letters, sorry!");
-		// 	} else if (this.card.cardHolder.length > 29) {
-		// 		this.errors.push("I'm sorry if you have a long name, but it cant be more than 29 letters!");
-		// 	}
+	// 	if (this.card.cardHolder === "" || this.card.cardHolder.match(/^\s+$/)) {
+	// 		this.errors.push("You must fill out your name!");
+	// 	} else if (this.card.cardHolder.match(/[0-9!@#$%^§&*()_+\-=[\]{};':"\\|,.<>/?¨´]+/g)) {
+	// 		this.errors.push("You cant have numbers or special characters in your name!");
+	// 	} else if (this.card.cardHolder.length < 4) {
+	// 		this.errors.push("Your name must be longer than 3 letters, sorry!");
+	// 	} else if (this.card.cardHolder.length > 29) {
+	// 		this.errors.push("I'm sorry if you have a long name, but it cant be more than 29 letters!");
+	// 	}
 
-		// 	if (this.card.expireMonth === "") {
-		// 		this.errors.push("Select what month your card expires!");
-		// 	}
+	// 	if (this.card.expireMonth === "") {
+	// 		this.errors.push("Select what month your card expires!");
+	// 	}
 
-		// 	if (this.card.expireYear === "") {
-		// 		this.errors.push("Select what year your card expires!");
-		// 	}
+	// 	if (this.card.expireYear === "") {
+	// 		this.errors.push("Select what year your card expires!");
+	// 	}
 
-		// 	if (this.card.vendor === "") {
-		// 		this.errors.push("Select a vendor!");
-		// 	}
+	// 	if (this.card.vendor === "") {
+	// 		this.errors.push("Select a vendor!");
+	// 	}
 
-		// 	// this.checkDupNum();
+	// 	// this.checkDupNum();
 
-		// 	if (!this.errors.length) {
-		// 		this.filledOutForm = true;
-		// 		this.$emit("toHome");
-		// 		this.submitCard();
-		// 		(this.cardColor = "#d0d0d0"),
-		// 			(this.card.vendor = ""),
-		// 			(this.card.cardNumber = ""),
-		// 			(this.card.cardHolder = ""),
-		// 			(this.card.expireMonth = ""),
-		// 			(this.card.expireYear = ""),
-		// 			(this.card.CCV = this.randomizeCvv());
-		// 	}
-		// },
-		// removeSingleError(event) {
-		// 	for (const error of this.errors) {
-		// 		if (error.includes(event.target.id)) {
-		// 			this.errors.splice(this.errors.indexOf(error), 1);
-		// 		}
-		// 	}
-		// },
-		// checkDupNum() {
-		// 	for (const value of this.cards) {
-		// 		if (this.card.cardNumber === value.cardNumber) {
-		// 			this.errors.push("A card with this number already exists!");
-		// 		}
-		// 	}
-		// },
+	// 	if (!this.errors.length) {
+	// 		this.filledOutForm = true;
+	// 		this.$emit("toHome");
+	// 		this.submitCard();
+	// 		(this.cardColor = "#d0d0d0"),
+	// 			(this.card.vendor = ""),
+	// 			(this.card.cardNumber = ""),
+	// 			(this.card.cardHolder = ""),
+	// 			(this.card.expireMonth = ""),
+	// 			(this.card.expireYear = ""),
+	// 			(this.card.CCV = this.randomizeCvv());
+	// 	}
+	// },
+	// removeSingleError(event) {
+	// 	for (const error of this.errors) {
+	// 		if (error.includes(event.target.id)) {
+	// 			this.errors.splice(this.errors.indexOf(error), 1);
+	// 		}
+	// 	}
+	// },
+	// checkDupNum() {
+	// 	for (const value of this.cards) {
+	// 		if (this.card.cardNumber === value.cardNumber) {
+	// 			this.errors.push("A card with this number already exists!");
+	// 		}
+	// 	}
+	// },
 	// },
 };
 </script>
@@ -353,23 +343,24 @@ button {
 		background: black;
 	}
 }
-
 .go-back {
 	margin-right: 31rem;
-	width: 5rem;
-	cursor: pointer;
-	color: white;
-	border-radius: 100%;
-	background: none;
-	&:hover {
-		background: #d0d0d0;
+	img {
+		width: 5rem;
+		cursor: pointer;
+		color: white;
+		border-radius: 100%;
+		background: none;
+		&:hover {
+			background: #d0d0d0;
+		}
 	}
 }
 @media screen and (max-width: 425px) {
 	form {
 		transform: scale(0.55);
 	}
-	.go-back{
+	.go-back {
 		margin-right: 16rem;
 		width: 4rem;
 	}
